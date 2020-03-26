@@ -39,7 +39,7 @@
 
 /* include rtconfig header to import configuration */
 #include <rtconfig.h>
-
+#include <libc/libc_signal.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
