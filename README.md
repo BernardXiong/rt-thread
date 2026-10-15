@@ -16,6 +16,8 @@
 <a href="https://hellogithub.com/repository/5816fc3c1e714d109631ceb377538ca9" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=5816fc3c1e714d109631ceb377538ca9&claim_uid=kVCe5FXIMGAjJfy" alt="Featured｜HelloGitHub" style="width: 100px; height: 20px;" width="250" height="54" /></a>
 # RT-Thread
 
+The `master` branch is in the **v5.4.0 development cycle**, not a stable release. Features and APIs are not frozen, and substantial changes may be merged during this cycle. For production use, choose a stable release tag.
+
 RT-Thread was born in 2006, it is an open source, neutral, and community-based real-time operating system (RTOS).
 
 RT-Thread is mainly written in C language, easy to understand and easy to port(can be quickly port to a wide range of mainstream MCUs and module chips). It applies object-oriented programming methods to real-time system design, making the code elegant, structured, modular, and very tailorable.
