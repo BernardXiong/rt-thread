@@ -1844,13 +1844,17 @@ static rt_err_t rt_serial_control(struct rt_device *dev,
         else
             config.flowcontrol = RT_SERIAL_FLOWCONTROL_NONE;
 
-        ret = serial->ops->configure(serial, &config);
-        if (ret != RT_EOK)
+        /* Software-only termios changes must not reset the UART FIFO. */
+        if (rt_memcmp(&config, &serial->config, sizeof(config)) != 0)
         {
-            break;
+            ret = serial->ops->configure(serial, &config);
+            if (ret != RT_EOK)
+            {
+                break;
+            }
+            /* set serial configure */
+            serial->config = config;
         }
-        /* set serial configure */
-        serial->config = config;
     }
     break;
     case TCFLSH:
