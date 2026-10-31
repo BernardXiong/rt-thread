@@ -169,6 +169,12 @@
 #define DFS_USING_POSIX
 #define DFS_USING_WORKDIR
 #define DFS_FD_MAX 16
+#define RT_USING_DFS_V2
+#define RT_USING_DFS_DEVFS
+#define RT_USING_DFS_PTYFS
+#define RT_USING_DFS_PROCFS
+#define RT_USING_DFS_CROMFS
+#define RT_USING_DFS_TMPFS
 #define RT_USING_PAGECACHE
 
 /* page cache config */
@@ -378,6 +384,7 @@
 
 /* IoT - internet of things */
 
+
 /* Wi-Fi */
 
 /* Marvell WiFi */
@@ -453,6 +460,9 @@
 /* Micrium: Micrium software products porting for RT-Thread */
 
 /* end of Micrium: Micrium software products porting for RT-Thread */
+#define PKG_USING_LWEXT4
+#define RT_USING_DFS_LWEXT4
+#define PKG_USING_LWEXT4_LATEST_VERSION
 /* end of system packages */
 
 /* peripheral libraries and drivers */
@@ -542,9 +552,12 @@
 /* entertainment: terminal games and other interesting software packages */
 
 /* end of entertainment: terminal games and other interesting software packages */
+#define PKG_USING_ZLIB
+#define PKG_USING_ZLIB_LATEST_VERSION
 /* end of miscellaneous packages */
 
 /* Arduino libraries */
+
 
 /* Projects and Demos */
 
@@ -604,16 +617,5 @@
 #define __STACKSIZE__ 65536
 #define BSP_ROOTFS_TYPE_EXT4
 #define BSP_RISCV_FPU_SOFT
-#define RT_USING_DFS_V2
-#define RT_USING_DFS_DEVFS
-#define RT_USING_DFS_PTYFS
-#define RT_USING_DFS_PROCFS
-#define RT_USING_DFS_CROMFS
-#define RT_USING_DFS_TMPFS
-#define PKG_USING_LWEXT4
-#define RT_USING_DFS_LWEXT4
-#define PKG_USING_LWEXT4_LATEST_VERSION
-#define PKG_USING_ZLIB
-#define PKG_USING_ZLIB_LATEST_VERSION
 
 #endif
