@@ -90,10 +90,13 @@ void rt_hw_aspace_switch(rt_aspace_t aspace)
     if (page_table == (uintptr_t)ARCH_MAP_FAILED)
     {
         /*
-         * During early K230 bring-up the kernel still runs with low physical
-         * pointers after relocation, including MMUTable. The formal kernel
-         * aspace does not translate that low pointer yet, but SATP needs the
-         * physical page-table address, so use the low address directly.
+         * During early K230 bring-up the page table pointer held by the kernel
+         * aspace can still be a low physical address, before the kernel has
+         * switched to the high virtual mapping. The formal kernel aspace only
+         * maps the high virtual range, so rt_kmem_v2p() cannot translate that
+         * low pointer, while SATP needs the physical address of the page
+         * table. Use such a low pointer as-is; a high virtual address that
+         * fails to translate is a real error and is not rewritten here.
          */
         if (ptr < KERNEL_VADDR_START)
         {
@@ -1104,8 +1107,9 @@ rt_inline int _pgtbl_order(void)
 static void _clear_user_pgtbl_entries(rt_ubase_t *table)
 {
     int i;
-    int start_idx = USER_VADDR_START >> VPN2_SHIFT;
-    int end_idx = (USER_VADDR_TOP - 1) >> VPN2_SHIFT;
+    /* Use the runtime top-level index so Sv39/Sv48/Sv57 all work. */
+    int start_idx = GET_LVL_INDEX(USER_VADDR_START, 1);
+    int end_idx = GET_LVL_INDEX(USER_VADDR_TOP - 1, 1);
 
     for (i = start_idx; i <= end_idx; i++)
     {

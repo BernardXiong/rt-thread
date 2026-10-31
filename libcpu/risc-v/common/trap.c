@@ -383,7 +383,7 @@ void rt_hw_trap(struct rt_hw_stack_frame *regs)
                 }
 
                 /* A failed user mapping must terminate only the LWP. */
-                if (is_user_fault && rt_thread_self())
+                if (is_user_fault && lwp_self())
                 {
                     _check_fault(regs, 0, "user fault");
                     return;
