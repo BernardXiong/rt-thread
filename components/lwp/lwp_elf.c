@@ -600,21 +600,11 @@ static int elf_zero_bss(struct rt_lwp *lwp, int fd, const Elf_Phdr *phdr, rt_uba
 }
 
 /**
- * @brief Map ELF segments into memory.
+ * @brief Derive the memory protection flags from an ELF segment's p_flags.
  *
- * This function maps the loadable segments of an ELF file into the process's address space.
- * It handles both executable and shared library files, manages BSS sections, and sets up
- * the load address and base address for dynamic libraries.
+ * @param p_flags ELF program header flags (PF_R, PF_W, PF_X).
  *
- * @param load_info Pointer to the structure containing ELF loading context.
- * @param elf_info Pointer to the structure containing ELF file information.
- * @param elfload_addr Pointer to store the final load address of the ELF file.
- * @param map_size Size of the memory mapping (0 for automatic calculation).
- * @param load_base Base address for loading (used for position-independent code).
- *
- * @return RT_EOK on success.
- * @return -RT_ERROR if memory mapping fails.
- * @return -ENOMEM if memory allocation fails.
+ * @return Protection flags suitable for elf_map().
  */
 static size_t elf_prot_from_pflags(uint32_t p_flags)
 {
@@ -634,6 +624,23 @@ static size_t elf_prot_from_pflags(uint32_t p_flags)
     return prot;
 }
 
+/**
+ * @brief Map ELF segments into memory.
+ *
+ * This function maps the loadable segments of an ELF file into the process's address space.
+ * It handles both executable and shared library files, manages BSS sections, and sets up
+ * the load address and base address for dynamic libraries.
+ *
+ * @param load_info Pointer to the structure containing ELF loading context.
+ * @param elf_info Pointer to the structure containing ELF file information.
+ * @param elfload_addr Pointer to store the final load address of the ELF file.
+ * @param map_size Size of the memory mapping (0 for automatic calculation).
+ * @param load_base Base address for loading (used for position-independent code).
+ *
+ * @return RT_EOK on success.
+ * @return -RT_ERROR if memory mapping fails.
+ * @return -ENOMEM if memory allocation fails.
+ */
 static int elf_file_mmap(elf_load_info_t *load_info, elf_info_t *elf_info, rt_ubase_t *elfload_addr,
                          rt_uint32_t map_size, rt_ubase_t *load_base)
 {
@@ -676,7 +683,12 @@ static int elf_file_mmap(elf_load_info_t *load_info, elf_info_t *elf_info, rt_ub
             flags &= ~MAP_FIXED;
         }
 
-        /* Map the segment into memory with correct permissions */
+        /*
+         * Map the segment with the permissions described by p_flags. When
+         * LWP_USING_MPROTECT is disabled, lwp_user_mm_attr_to_kernel() ignores
+         * the protection and always maps the segment as MMU_MAP_U_RWCB, so
+         * this behaves exactly as before until MPROTECT is enabled.
+         */
         map_va = elf_map(load_info->lwp, tmp_phdr, fd, load_addr, elf_prot_from_pflags(tmp_phdr->p_flags), flags, map_size);
         if (!map_va)
         {
