@@ -398,7 +398,12 @@ rt_int32_t rt_mmcsd_blk_probe(struct rt_mmcsd_card *card)
     {
         goto _fail;
     }
-    blk_dev->geometry.block_size = blk_dev->geometry.bytes_per_sector;
+    /*
+     * mmcsd_set_blksize() configured the card for MMCSD_SECTOR_SIZE transfers.
+     * Report that value, not card->card_blksize (the CSD read block length),
+     * as the block size used by the block layer.
+     */
+    blk_dev->geometry.block_size = MMCSD_SECTOR_SIZE;
     rt_thread_mdelay(1);
 
 #ifdef RT_USING_DM
