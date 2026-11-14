@@ -228,6 +228,7 @@
 #define RT_BLK_PARTITION_EFI
 /* end of Partition Types */
 #define RT_USING_RESET
+#define RT_USING_GRAPHIC
 
 /* Power Management (PM) Domains device drivers */
 
@@ -238,6 +239,7 @@
 #define RT_VIRTIO_BLK
 #define RT_VIRTIO_CONSOLE
 #define RT_VIRTIO_RPROC_SERIAL
+#define RT_VIRTIO_GPU
 #define RT_USING_DMA
 #define RT_USING_OFW
 #define RT_FDT_EARLYCON_MSG_SIZE 128
