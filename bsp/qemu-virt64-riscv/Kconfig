@@ -33,7 +33,7 @@ config ARCH_RAM_OFFSET
     default 0x80000000
 
 source "$(RTT_DIR)/Kconfig"
-osource "$PKGS_DIR/Kconfig"
+osource "$(PKGS_DIR)/Kconfig"
 
 config BSP_USING_QEMU_RISCV_VIRT
     bool
